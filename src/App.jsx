@@ -1,28 +1,37 @@
-import { useState } from 'react'
+import React from 'react';
+import HeroCover from './components/HeroCover';
+import GameCanvas from './components/GameCanvas';
+import GameHUD from './components/GameHUD';
+import ControlsHelp from './components/ControlsHelp';
 
-function App() {
-  const [count, setCount] = useState(0)
+export default function App() {
+  const [hudState, setHudState] = React.useState({
+    level: 1,
+    score: 0,
+    lives: 3,
+    paused: false,
+    gameOver: false,
+    victory: false,
+  });
+
+  const handleHudUpdate = (partial) => {
+    setHudState((prev) => ({ ...prev, ...partial }));
+  };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 flex items-center justify-center">
-      <div className="bg-white p-8 rounded-lg shadow-lg">
-        <h1 className="text-3xl font-bold text-gray-800 mb-4">
-          Vibe Coding Platform
-        </h1>
-        <p className="text-gray-600 mb-6">
-          Your AI-powered development environment
-        </p>
-        <div className="text-center">
-          <button
-            onClick={() => setCount(count + 1)}
-            className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"
-          >
-            Count is {count}
-          </button>
+    <div className="min-h-screen bg-gradient-to-b from-sky-100 via-white to-sky-50 text-slate-900">
+      <HeroCover />
+      <div className="max-w-5xl mx-auto px-4 pb-24">
+        <div className="grid md:grid-cols-[2fr_1fr] gap-6">
+          <div className="rounded-xl border border-slate-200 shadow-sm bg-white/80 backdrop-blur-sm">
+            <GameCanvas onHudUpdate={handleHudUpdate} />
+          </div>
+          <div className="space-y-6">
+            <GameHUD {...hudState} />
+            <ControlsHelp />
+          </div>
         </div>
       </div>
     </div>
-  )
+  );
 }
-
-export default App
